@@ -123,7 +123,7 @@ comm -23 containers.all containers.running > containers.exited
 echo -n "" > containers.reap.tmp
 cat containers.exited | while read line
 do
-    EXITED=$(${DOCKER} inspect -f "{{json .State.FinishedAt}}" ${line})
+    EXITED=$(${DOCKER} inspect -f "{{json .State.FinishedAt}}" ${line} | sed 's/"//g')
     ELAPSED=$(elapsed_time $EXITED)
     if [[ $ELAPSED -gt $GRACE_PERIOD_SECONDS ]]; then
         echo $line >> containers.reap.tmp
